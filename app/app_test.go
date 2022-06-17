@@ -6,10 +6,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	db "github.com/tendermint/tm-db"
 
-	gaia "github.com/cosmos/gaia/v7/app"
+	gaiahelpers "github.com/cosmos/gaia/v8/app/helpers"
 )
 
 type EmptyAppOptions struct{}
@@ -19,17 +17,7 @@ func (ao EmptyAppOptions) Get(o string) interface{} {
 }
 
 func TestGaiaApp_BlockedModuleAccountAddrs(t *testing.T) {
-	app := gaia.NewGaiaApp(
-		log.NewNopLogger(),
-		db.NewMemDB(),
-		nil,
-		true,
-		map[int64]bool{},
-		gaia.DefaultNodeHome,
-		0,
-		gaia.MakeEncodingConfig(),
-		EmptyAppOptions{},
-	)
+	app := gaiahelpers.Setup(t, true, 1)
 	blockedAddrs := app.BlockedModuleAccountAddrs()
 
 	// TODO: Blocked on updating to v0.46.x
